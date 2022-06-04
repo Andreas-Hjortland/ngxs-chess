@@ -1,0 +1,11 @@
+<a
+  target="_blank"
+  rel="noreferrer noopener"
+  [style.display]="peerId && !connected ? '' : 'none'"
+  [href]="'join/' + peerId"
+>
+  Link to other player
+  <canvas #qr></canvas>
+</a>
+<span *ngIf="connected">Connected to </span>
+<app-chessboard color="white"></app-chessboard>

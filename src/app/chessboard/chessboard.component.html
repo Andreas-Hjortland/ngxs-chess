@@ -1,0 +1,79 @@
+<ng-container *ngIf="state$ | async as state; else waiting">
+  <ng-container *ngIf="state.victor">{{ state.turn }} won!</ng-container>
+  <ng-container *ngIf="!state.victor">
+    It's {{ state.turn }}'s turn
+  </ng-container>
+  <div
+    *ngIf="whiteCaptured$ | async as whiteCaptured"
+    title="White pieces captured"
+    id="white-captured"
+  >
+    <ul>
+      <li *ngFor="let piece of whiteCaptured">{{ piece }}</li>
+    </ul>
+  </div>
+
+  <div
+    *ngIf="blackCaptured$ | async as blackCaptured"
+    title="Black pieces captured"
+    id="black-captured"
+  >
+    <ul>
+      <li *ngFor="let piece of blackCaptured">{{ piece }}</li>
+    </ul>
+  </div>
+  <table [class]="color">
+    <thead>
+      <tr>
+        <th></th>
+        <th>a</th>
+        <th>b</th>
+        <th>c</th>
+        <th>d</th>
+        <th>e</th>
+        <th>f</th>
+        <th>g</th>
+        <th>h</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody cdkDropListGroup>
+      <tr *ngFor="let row of state.board; let i = index">
+        <th>{{ row.length - i }}</th>
+        <td
+          *ngFor="let piece of row; let j = index"
+          cdkDropList
+          [cdkDropListData]="[j, row.length - i - 1]"
+          (cdkDropListDropped)="onDrop($event)"
+          [cdkDropListEnterPredicate]="canDrop"
+        >
+          <div
+            cdkDrag
+            [cdkDragDisabled]="(piece | owner) !== state.turn"
+            [cdkDragData]="[j, row.length - i - 1]"
+          >
+            {{ piece }}
+          </div>
+        </td>
+        <th>{{ row.length - i }}</th>
+      </tr>
+    </tbody>
+
+    <tfoot>
+      <tr>
+        <th></th>
+        <th>a</th>
+        <th>b</th>
+        <th>c</th>
+        <th>d</th>
+        <th>e</th>
+        <th>f</th>
+        <th>g</th>
+        <th>h</th>
+        <th></th>
+      </tr>
+    </tfoot>
+  </table>
+</ng-container>
+<ng-template #waiting>Setting stuff up...</ng-template>
