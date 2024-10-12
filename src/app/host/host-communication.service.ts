@@ -1,4 +1,4 @@
-import { ElementRef, Injectable, OnDestroy, ViewChild } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { MessageCommunicationService } from 'ngxs-message-plugin';
 import Peer, { DataConnection } from 'peerjs';
 import { Subject } from 'rxjs';
@@ -24,7 +24,10 @@ export class HostCommunicationService
     });
     this.connection = new Promise((resolve, reject) => {
       this.peer.on('connection', resolve);
-      this.peer.on('error', reject);
+      this.peer.on('error', err => {
+        console.error('peer error', err);
+        reject(err)
+      });
     });
     this.connection.then((connection) => {
       connection.on('data', (data) => {
@@ -32,6 +35,9 @@ export class HostCommunicationService
         console.log('got data', data);
         this.$messages.next(data);
       });
+      connection.on('error', err => {
+        console.log('connection error', err);
+      })
     });
   }
 
@@ -40,8 +46,13 @@ export class HostCommunicationService
   }
 
   async postMessage(message: any): Promise<void> {
-    console.log('[HOST] posting message', message);
-    const connection = await this.connection;
-    connection.send(message);
+    try {
+      console.log('[HOST] posting message', message);
+      const connection = await this.connection;
+      await connection.send(message);
+    } catch (err) {
+      console.error('send error', err);
+      throw err;
+    }
   }
 }

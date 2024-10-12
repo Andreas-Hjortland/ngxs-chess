@@ -1,88 +1,81 @@
-@if (state$ | async; as state) {
-  @if (state.victor) {
-    {{ state.turn }} won!
-  }
-  @if (!state.victor) {
-    It's {{ state.turn }}'s turn
-  }
-  @if (whiteCaptured$ | async; as whiteCaptured) {
-    <div
-      title="White pieces captured"
-      id="white-captured"
-      >
-      <ul>
-        @for (piece of whiteCaptured; track $index) {
-          <li>{{ piece }}</li>
-        }
-      </ul>
-    </div>
-  }
-  @if (blackCaptured$ | async; as blackCaptured) {
-    <div
-      title="Black pieces captured"
-      id="black-captured"
-      >
-      <ul>
-        @for (piece of blackCaptured; track $index) {
-          <li>{{ piece }}</li>
-        }
-      </ul>
-    </div>
-  }
-  <table [class]="color">
-    <thead>
-      <tr>
-        <th></th>
-        <th>a</th>
-        <th>b</th>
-        <th>c</th>
-        <th>d</th>
-        <th>e</th>
-        <th>f</th>
-        <th>g</th>
-        <th>h</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody cdkDropListGroup>
-      @for (row of state.board; track $index; let i = $index) {
-        <tr>
-          <th>{{ row.length - i }}</th>
-          @for (piece of row; track $index; let j = $index) {
-            <td
-              cdkDropList
-              [cdkDropListData]="[j, row.length - i - 1]"
-              (cdkDropListDropped)="onDrop($event)"
-              [cdkDropListEnterPredicate]="canDrop"
-              >
-              <div
-                cdkDrag
-                [cdkDragDisabled]="(piece | owner) !== state.turn"
-                [cdkDragData]="[j, row.length - i - 1]"
-                >
-                {{ piece }}
-              </div>
-            </td>
-          }
-          <th>{{ row.length - i }}</th>
-        </tr>
-      }
-    </tbody>
-    <tfoot>
-      <tr>
-        <th></th>
-        <th>a</th>
-        <th>b</th>
-        <th>c</th>
-        <th>d</th>
-        <th>e</th>
-        <th>f</th>
-        <th>g</th>
-        <th>h</th>
-        <th></th>
-      </tr>
-    </tfoot>
-  </table>
+@if (victor()) {
+  {{ turn() }} won!
 } @else {
-  Setting stuff up...
+  It's {{ turn() }}'s turn
 }
+<div
+  title="White pieces captured"
+  id="white-captured"
+  >
+  <ul>
+    @for (piece of whiteCaptured(); track $index) {
+      <li>{{ piece }}</li>
+    }
+  </ul>
+</div>
+
+<div
+  title="Black pieces captured"
+  id="black-captured"
+  >
+  <ul>
+    @for (piece of blackCaptured(); track $index) {
+      <li>{{ piece }}</li>
+    }
+  </ul>
+</div>
+
+<table [class]="color">
+  <thead>
+    <tr>
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+      <th>e</th>
+      <th>f</th>
+      <th>g</th>
+      <th>h</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody cdkDropListGroup>
+    @for (row of board(); track $index; let i = $index) {
+      <tr>
+        <th>{{ row.length - i }}</th>
+        @for (piece of row; track $index; let j = $index) {
+          <td
+            cdkDropList
+            [cdkDropListData]="[j, row.length - i - 1]"
+            (cdkDropListDropped)="onDrop($event)"
+            [cdkDropListEnterPredicate]="canDrop"
+            >
+            <div
+              cdkDrag
+              [cdkDragDisabled]="(piece | owner) !== turn()"
+              [cdkDragData]="[j, row.length - i - 1]"
+              >
+              {{ piece }}
+            </div>
+          </td>
+        }
+        <th>{{ row.length - i }}</th>
+      </tr>
+    }
+  </tbody>
+  <tfoot>
+    <tr>
+      <th></th>
+      <th>a</th>
+      <th>b</th>
+      <th>c</th>
+      <th>d</th>
+      <th>e</th>
+      <th>f</th>
+      <th>g</th>
+      <th>h</th>
+      <th></th>
+    </tr>
+  </tfoot>
+</table>

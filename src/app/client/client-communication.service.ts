@@ -35,6 +35,9 @@ export class ClientCommunicationService
         // connection.send('Hi from client');
         this.resolve(connection);
       });
+      connection.on('error', (err) => {
+        console.error('connection error', err);
+      });
     }, 1000);
   }
 
@@ -44,6 +47,9 @@ export class ClientCommunicationService
 
   postMessage(message: any): void {
     console.log('[CLIENT] posting message', message);
-    this.connection?.then((conn) => conn.send(message));
+    this.connection?.then((conn) => conn.send(message)).catch(err => {
+      console.error('send error', err);
+      throw err;
+    });
   }
 }

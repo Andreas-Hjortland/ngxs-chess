@@ -1,30 +1,33 @@
-import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, CdkDropList, CdkDropListGroup } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
+import { provideStates, Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { fromIdx, isValidMove, Turn as PlayerColor } from './chess-rules';
 import { ChessState, ChessStateModel, Move } from './chessboard.state';
+import { AsyncPipe } from '@angular/common';
+import { OwnerPipe } from './owner.pipe';
 
 @Component({
-  selector: 'app-chessboard',
-  templateUrl: './chessboard.component.html',
-  styleUrls: ['./chessboard.component.scss'],
+    selector: 'app-chessboard',
+    templateUrl: './chessboard.component.html',
+    styleUrls: ['./chessboard.component.scss'],
+    standalone: true,
+    imports: [
+        CdkDropListGroup,
+        CdkDropList,
+        CdkDrag,
+        AsyncPipe,
+        OwnerPipe,
+    ],
 })
 export class ChessboardComponent implements OnInit {
   @Input() color: PlayerColor = 'white';
 
-  @Select(ChessState.blackCaptured)
-  public readonly blackCaptured$!: Observable<
-    ReturnType<typeof ChessState.blackCaptured>
-  >;
-
-  @Select(ChessState.whiteCaptured)
-  public readonly whiteCaptured$!: Observable<
-    ReturnType<typeof ChessState.whiteCaptured>
-  >;
-
-  @Select(ChessState)
-  public readonly state$!: Observable<ChessStateModel>;
+  public readonly blackCaptured = this.store.selectSignal(ChessState.blackCaptured);
+  public readonly whiteCaptured = this.store.selectSignal(ChessState.whiteCaptured);
+  public readonly board = this.store.selectSignal(ChessState.board);
+  public readonly turn = this.store.selectSignal(ChessState.turn);
+  public readonly victor = this.store.selectSignal(ChessState.victor);
 
   constructor(private store: Store) {}
 

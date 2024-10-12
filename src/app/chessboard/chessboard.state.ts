@@ -55,6 +55,10 @@ export class ChessState {
     return state.turn;
   }
   @Selector()
+  static victor(state: ChessStateModel) {
+    return state.victor;
+  }
+  @Selector()
   static whiteCaptured(state: ChessStateModel) {
     return state.capturedPieces.filter(isWhite);
   }

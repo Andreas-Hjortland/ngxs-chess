@@ -1,12 +1,15 @@
 import { AfterViewInit, Component, ElementRef, Host, OnInit, ViewChild } from '@angular/core';
-import { HostHandler, MessageCommunicationService } from 'ngxs-message-plugin';
+import { MessageCommunicationService } from 'ngxs-message-plugin';
 import { HostCommunicationService } from './host-communication.service';
 import QRious from 'qrious';
+import { ChessboardComponent } from '../chessboard/chessboard.component';
 
 @Component({
-  selector: 'app-host',
-  templateUrl: './host.component.html',
-  styleUrls: ['./host.component.scss'],
+    selector: 'app-host',
+    templateUrl: './host.component.html',
+    styleUrls: ['./host.component.scss'],
+    standalone: true,
+    imports: [ChessboardComponent],
 })
 export class HostComponent implements OnInit, AfterViewInit{
   @ViewChild('qr')
