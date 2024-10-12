@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import produce from 'immer';
+import { produce } from 'immer';
 import {
   Square,
   Turn,
@@ -45,6 +45,15 @@ export type ChessStateModel = {
 })
 @Injectable()
 export class ChessState {
+
+  @Selector()
+  static board(state: ChessStateModel) {
+    return state.board;
+  }
+  @Selector()
+  static turn(state: ChessStateModel) {
+    return state.turn;
+  }
   @Selector()
   static whiteCaptured(state: ChessStateModel) {
     return state.capturedPieces.filter(isWhite);

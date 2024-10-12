@@ -23,10 +23,10 @@ const routes: Routes = [
   declarations: [ClientComponent],
   imports: [
     CommonModule,
+    ChessboardModule,
     NgxsMessagePluginModule.forChild({
       messageHandler: ClientCommunicationService,
     }),
-    ChessboardModule,
     RouterModule.forChild(routes),
   ],
   providers: [ClientCommunicationService, ClientResolverService],

@@ -18,12 +18,11 @@ const routes: Routes = [
 @NgModule({
   declarations: [HostComponent],
   imports: [
-    CommonModule,
     RouterModule.forChild(routes),
+    ChessboardModule,
     NgxsMessagePluginModule.forRoot({
       messageHandler: HostCommunicationService,
     }),
-    ChessboardModule,
   ],
   providers: [HostCommunicationService],
   exports: [RouterModule],

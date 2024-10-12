@@ -35,7 +35,7 @@ export class ChessboardComponent implements OnInit {
   onDrop($event: CdkDragDrop<any, any>) {
     const source = fromIdx($event.item.data[0], $event.item.data[1]);
     const target = fromIdx($event.container.data[0], $event.container.data[1]);
-    const { board, turn } = this.store.selectSnapshot(ChessState);
+    const board = this.store.selectSnapshot(ChessState.board);
     if (isValidMove(board, source, target)) {
       this.store.dispatch(new Move(source, target)).subscribe({
         error(err) {
@@ -50,7 +50,7 @@ export class ChessboardComponent implements OnInit {
     const target = fromIdx(drop.data[0], drop.data[1]);
 
     const isValid = isValidMove(
-      this.store.selectSnapshot(ChessState).board,
+      this.store.selectSnapshot(ChessState.board),
       source,
       target
     );
