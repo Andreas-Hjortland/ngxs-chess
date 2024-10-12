@@ -73,10 +73,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "ngxs-chess:build:production"
+              "buildTarget": "ngxs-chess:build:production"
             },
             "development": {
-              "browserTarget": "ngxs-chess:build:development"
+              "buildTarget": "ngxs-chess:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -84,7 +84,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ngxs-chess:build"
+            "buildTarget": "ngxs-chess:build"
           }
         },
         "test": {
