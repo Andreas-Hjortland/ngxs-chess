@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ChessboardComponent } from '../chessboard/chessboard.component';
 
 @Component({
@@ -6,13 +6,7 @@ import { ChessboardComponent } from '../chessboard/chessboard.component';
     templateUrl: './client.component.html',
     styleUrls: ['./client.component.scss'],
     standalone: true,
-    imports: [ChessboardComponent]
+    imports: [ChessboardComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ClientComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
-}
+export class ClientComponent { }

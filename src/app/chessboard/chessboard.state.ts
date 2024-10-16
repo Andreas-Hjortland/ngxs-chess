@@ -16,7 +16,10 @@ import {
 export class Move {
   public static readonly type = '[CHESS] Move';
 
-  constructor(public readonly from: Square, public readonly to: Square) {}
+  constructor(
+    public readonly from: Square,
+    public readonly to: Square
+  ) {}
 }
 
 export type ChessStateModel = {

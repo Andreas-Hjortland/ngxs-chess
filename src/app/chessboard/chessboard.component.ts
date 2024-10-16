@@ -1,9 +1,8 @@
 import { CdkDrag, CdkDragDrop, CdkDropList, CdkDropListGroup } from '@angular/cdk/drag-drop';
-import { Component, Input, OnInit } from '@angular/core';
-import { provideStates, Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { ChangeDetectionStrategy, Component, inject, Input, OnInit } from '@angular/core';
+import { Store } from '@ngxs/store';
 import { fromIdx, isValidMove, Turn as PlayerColor } from './chess-rules';
-import { ChessState, ChessStateModel, Move } from './chessboard.state';
+import { ChessState, Move } from './chessboard.state';
 import { AsyncPipe } from '@angular/common';
 import { OwnerPipe } from './owner.pipe';
 
@@ -19,21 +18,17 @@ import { OwnerPipe } from './owner.pipe';
         AsyncPipe,
         OwnerPipe,
     ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChessboardComponent implements OnInit {
+export class ChessboardComponent {
   @Input() color: PlayerColor = 'white';
 
+  private readonly store = inject(Store);
   public readonly blackCaptured = this.store.selectSignal(ChessState.blackCaptured);
   public readonly whiteCaptured = this.store.selectSignal(ChessState.whiteCaptured);
   public readonly board = this.store.selectSignal(ChessState.board);
   public readonly turn = this.store.selectSignal(ChessState.turn);
   public readonly victor = this.store.selectSignal(ChessState.victor);
-
-  constructor(private store: Store) {}
-
-  log(name: string, $event: any) {
-    console.log(name, $event);
-  }
 
   onDrop($event: CdkDragDrop<any, any>) {
     const source = fromIdx($event.item.data[0], $event.item.data[1]);
@@ -57,14 +52,6 @@ export class ChessboardComponent implements OnInit {
       source,
       target
     );
-    // console.log(
-    //   'canDrop',
-    //   source.file + source.rank,
-    //   target.file + target.rank,
-    //   isValid
-    // );
     return isValid;
   };
-
-  ngOnInit(): void {}
 }

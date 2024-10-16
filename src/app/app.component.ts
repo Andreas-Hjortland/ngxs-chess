@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 
@@ -8,6 +8,7 @@ import { RouterOutlet } from '@angular/router';
     styleUrls: ['./app.component.scss'],
     standalone: true,
     imports: [FormsModule, RouterOutlet],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
   title = 'ngxs-chess';

@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ChessboardComponent } from './chessboard.component';
+import { provideExperimentalZonelessChangeDetection } from '@angular/core';
+import { ChessState } from './chessboard.state';
+import { provideStore } from '@ngxs/store';
 
 describe('ChessboardComponent', () => {
   let component: ChessboardComponent;
@@ -8,8 +11,12 @@ describe('ChessboardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [ChessboardComponent]
-})
+      imports: [ChessboardComponent],
+      providers: [
+        provideExperimentalZonelessChangeDetection(),
+        provideStore([ChessState]),
+      ]
+  })
     .compileComponents();
   });
 

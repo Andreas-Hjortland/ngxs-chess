@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { provideStore } from '@ngxs/store';
+import { provideStates } from '@ngxs/store';
 import { withNgxsMessagePlugin } from 'ngxs-message-plugin';
 import { HostCommunicationService } from './host-communication.service';
 import { HostComponent } from './host.component';
@@ -10,7 +10,7 @@ export default [
       component: HostComponent,
       providers: [
         HostCommunicationService,
-        provideStore([], 
+        provideStates([], 
           withNgxsMessagePlugin(true, {
             messageHandler: HostCommunicationService,
           })

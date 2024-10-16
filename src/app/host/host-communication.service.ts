@@ -22,14 +22,22 @@ export class HostCommunicationService
         resolve(id);
       });
     });
-    this.connection = new Promise((resolve, reject) => {
-      this.peer.on('connection', resolve);
-      this.peer.on('error', err => {
-        console.error('peer error', err);
-        reject(err)
+    this.connection = new Promise<DataConnection>((resolve, reject) => {
+      this.peer.on('connection', (connection) => {
+        if(connection.open) resolve(connection);
+        else {
+          console.log('Got connection. waiting for open', connection);
+          connection.on('open', () => resolve(connection));
+          connection.on('error', reject);
+        }
       });
+      this.peer.on('error', reject);
+    }).catch((err) => {
+      console.error('connection error', err);
+      throw err;
     });
     this.connection.then((connection) => {
+      console.log('Connected', connection);
       connection.on('data', (data) => {
         // connection.send('Hi from host');
         console.log('got data', data);

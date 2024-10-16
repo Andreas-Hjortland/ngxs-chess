@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Host, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Host, inject, OnInit, ViewChild } from '@angular/core';
 import { MessageCommunicationService } from 'ngxs-message-plugin';
 import { HostCommunicationService } from './host-communication.service';
 import QRious from 'qrious';
@@ -10,6 +10,7 @@ import { ChessboardComponent } from '../chessboard/chessboard.component';
     styleUrls: ['./host.component.scss'],
     standalone: true,
     imports: [ChessboardComponent],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HostComponent implements OnInit, AfterViewInit{
   @ViewChild('qr')
@@ -17,17 +18,13 @@ export class HostComponent implements OnInit, AfterViewInit{
 
   public peerId: string = '';
   public connected: false | string = false;
-  private readonly service: HostCommunicationService;
-
-  constructor(
-    service: MessageCommunicationService,
-  ) {
-    this.service = <HostCommunicationService>service;
-  }
+  private readonly service = inject(MessageCommunicationService) as HostCommunicationService;
+  private readonly cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.service.connection.then(c => {
       this.connected = c.peer;
+      this.cdr.markForCheck();
       console.log('connection', c);
     });
   }
@@ -40,6 +37,7 @@ export class HostComponent implements OnInit, AfterViewInit{
         size: 256,
       });
       this.peerId = peerId;
+      this.cdr.markForCheck();
     });
   }
 }
